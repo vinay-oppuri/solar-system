@@ -1,0 +1,66 @@
+
+> solar-system@0.1.0 build
+> next build
+
+▲ Next.js 16.1.6 (Turbopack)
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 4 errors:
+./app/page.tsx:3:27
+Ecmascript file had an error
+[0m [90m 1 |[39m [36mimport[39m dynamic [36mfrom[39m [32m'next/dynamic'[39m[33m;[39m
+ [90m 2 |[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mconst[39m [33mSolarSystemCanvas[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'@/components/canvas/SolarSystemCanvas'[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+ [90m   |[39m                           [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mconst[39m [33mHoverCard[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'@/components/ui/HoverCard'[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+ [90m 5 |[39m [36mconst[39m [33mPlanetDetailPanel[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'@/components/ui/PlanetDetailPanel'[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+ [90m 6 |[39m [36mconst[39m [33mLoadingScreen[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'@/components/ui/LoadingScreen'[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m[0m
+
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+
+
+./app/page.tsx:4:19
+Ecmascript file had an error
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mconst[39m [33mSolarSystemCanvas[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'@/components/canvas/SolarSystemCanvas'[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mconst[39m [33mHoverCard[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'@/components/ui/HoverCard'[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+ [90m   |[39m                   [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mconst[39m [33mPlanetDetailPanel[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'@/components/ui/PlanetDetailPanel'[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+ [90m 6 |[39m [36mconst[39m [33mLoadingScreen[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'@/components/ui/LoadingScreen'[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+ [90m 7 |[39m[0m
+
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+
+
+./app/page.tsx:5:27
+Ecmascript file had an error
+[0m [90m 3 |[39m [36mconst[39m [33mSolarSystemCanvas[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'@/components/canvas/SolarSystemCanvas'[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+ [90m 4 |[39m [36mconst[39m [33mHoverCard[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'@/components/ui/HoverCard'[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+[31m[1m>[22m[39m[90m 5 |[39m [36mconst[39m [33mPlanetDetailPanel[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'@/components/ui/PlanetDetailPanel'[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+ [90m   |[39m                           [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 6 |[39m [36mconst[39m [33mLoadingScreen[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'@/components/ui/LoadingScreen'[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+ [90m 7 |[39m
+ [90m 8 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mHome[39m() {[0m
+
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+
+
+./app/page.tsx:6:23
+Ecmascript file had an error
+[0m [90m 4 |[39m [36mconst[39m [33mHoverCard[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'@/components/ui/HoverCard'[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+ [90m 5 |[39m [36mconst[39m [33mPlanetDetailPanel[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'@/components/ui/PlanetDetailPanel'[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+[31m[1m>[22m[39m[90m 6 |[39m [36mconst[39m [33mLoadingScreen[39m [33m=[39m dynamic(() [33m=>[39m [36mimport[39m([32m'@/components/ui/LoadingScreen'[39m)[33m,[39m { ssr[33m:[39m [36mfalse[39m })[33m;[39m
+ [90m   |[39m                       [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 7 |[39m
+ [90m 8 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mHome[39m() {
+ [90m 9 |[39m     [36mreturn[39m ([0m
+
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+
+
+    at <unknown> (./app/page.tsx:3:27)
+    at <unknown> (./app/page.tsx:4:19)
+    at <unknown> (./app/page.tsx:5:27)
+    at <unknown> (./app/page.tsx:6:23)
