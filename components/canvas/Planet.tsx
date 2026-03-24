@@ -27,7 +27,7 @@ const Atmosphere = ({ color, size, isGasGiant }: { color: string, size: number, 
   `;
     return (
         <mesh scale={isGasGiant ? 1.06 : 1.12}>
-            <sphereGeometry args={[size, 64, 64]} />
+            <sphereGeometry args={[size, 40, 40]} />
             <shaderMaterial
                 vertexShader={vertexShader}
                 fragmentShader={fragmentShader}
@@ -157,7 +157,7 @@ const Planet = memo(({ data, index }: PlanetProps) => {
                     castShadow
                     receiveShadow
                 >
-                    <sphereGeometry args={[data.size, 32, 32]} />
+                    <sphereGeometry args={[data.size, 24, 24]} />
                     <meshStandardMaterial
                         map={texture}
                         roughness={data.type === 'Gas Giant' || data.type === 'Ice Giant' ? 0.3 : 0.8}

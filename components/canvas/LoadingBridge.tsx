@@ -24,8 +24,9 @@ export default function LoadingBridge() {
         setLoadingProgress(progress);
 
         if (didStartLoading.current) {
-            // Normal case: loading started, wait for it to complete
-            setIsLoading(active || progress < 100);
+            // Treat >= 99.5 as completed to avoid stuck overlays due float precision.
+            const isDone = !active && progress >= 99.5;
+            setIsLoading(!isDone);
         } else {
             // Nothing has started loading yet — could be cached assets.
             // Mark as loaded after a short grace period so the scene is visible.

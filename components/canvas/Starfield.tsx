@@ -7,11 +7,11 @@ export default function Starfield() {
         <Stars
             radius={100}
             depth={50}
-            count={6000}
-            factor={4}
+            count={2600}
+            factor={3}
             saturation={0}
             fade
-            speed={1}
+            speed={0.35}
         />
     );
 }

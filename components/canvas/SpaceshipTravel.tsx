@@ -12,14 +12,23 @@ export default function SpaceshipTravel() {
     const cameraTarget = useStore(state => state.cameraTarget);
     const selectedPlanet = useStore(state => state.selectedPlanet);
     const orbitAngle = useRef(0);
+    const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
     useEffect(() => {
+        camera.lookAt(0, 0, 0);
+    }, [camera]);
+
+    useEffect(() => {
+        timelineRef.current?.kill();
+        timelineRef.current = null;
+
         if (phase === 'traveling' && selectedPlanet) {
             const tl = gsap.timeline({
                 onComplete: () => {
                     setPhase('arrived');
                 }
             });
+            timelineRef.current = tl;
 
             const targetPos = cameraTarget;
             const dist = selectedPlanet.size * 3 + 2;
@@ -56,6 +65,11 @@ export default function SpaceshipTravel() {
                 }
             });
         }
+
+        return () => {
+            timelineRef.current?.kill();
+            timelineRef.current = null;
+        };
     }, [phase, cameraTarget, selectedPlanet, camera, setPhase]);
 
     // Handled slow orbit around planet when arrived

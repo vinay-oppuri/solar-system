@@ -126,7 +126,7 @@ export default function Sun() {
             onPointerEnter={handlePointerEnter}
             onPointerLeave={handlePointerLeave}
         >
-            <sphereGeometry args={[4, 64, 64]} />
+            <sphereGeometry args={[4, 48, 48]} />
             <shaderMaterial
                 ref={materialRef}
                 vertexShader={vertexShader}

@@ -17,7 +17,7 @@ export default function LoadingScreen() {
     if (!show) return null;
 
     return (
-        <div className={`fixed inset-0 z-100 bg-spaceBlack flex flex-col items-center justify-center transition-opacity duration-700 ${!isLoading ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}>
+        <div className={`fixed inset-0 z-[100] bg-spaceBlack flex flex-col items-center justify-center transition-opacity duration-700 ${!isLoading ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}>
             <div className="w-64 max-w-[80vw]">
                 <div className="text-accent font-space-mono text-xs mb-3 tracking-widest uppercase flex justify-between items-end">
                     <span className="animate-pulse">Establishing Uplink...</span>
