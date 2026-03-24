@@ -23,6 +23,7 @@ export default function SpaceshipTravel() {
         timelineRef.current = null;
 
         if (phase === 'traveling' && selectedPlanet) {
+            orbitAngle.current = 0;
             const tl = gsap.timeline({
                 onComplete: () => {
                     setPhase('arrived');
@@ -30,31 +31,52 @@ export default function SpaceshipTravel() {
             });
             timelineRef.current = tl;
 
-            const targetPos = cameraTarget;
+            const targetPos = cameraTarget.clone();
             const dist = selectedPlanet.size * 3 + 2;
-            const direction = new THREE.Vector3().subVectors(camera.position, targetPos).normalize();
-            const finalCameraPos = new THREE.Vector3().copy(targetPos).add(direction.multiplyScalar(dist));
+            const startPos = camera.position.clone();
+            let pullbackDirection = new THREE.Vector3().subVectors(startPos, targetPos);
+            if (pullbackDirection.lengthSq() < 0.0001) {
+                pullbackDirection = new THREE.Vector3(0, 0, 1);
+            } else {
+                pullbackDirection.normalize();
+            }
+            const pullbackPos = startPos
+                .clone()
+                .add(pullbackDirection.clone().multiplyScalar(20))
+                .add(new THREE.Vector3(0, 4.5, 0));
+            const finalCameraPos = new THREE.Vector3();
 
-            // 1. Pull back
+            // 1. Pull back from current camera position.
             tl.to(camera.position, {
-                z: camera.position.z + 20,
-                y: camera.position.y + 5,
-                duration: 0.8,
-                ease: 'power1.inOut'
+                x: pullbackPos.x,
+                y: pullbackPos.y,
+                z: pullbackPos.z,
+                duration: 0.9,
+                ease: 'power2.inOut',
+                onUpdate: () => {
+                    camera.lookAt(targetPos);
+                }
             })
-                // 2 & 3. Rush forward
+                // 2. Zoom in from the exact pullback location.
                 .to(camera.position, {
-                    x: finalCameraPos.x,
-                    y: finalCameraPos.y,
-                    z: finalCameraPos.z,
-                    duration: 3.7,
-                    ease: 'power3.inOut', // using power3 for a rushing feel
+                    duration: 3.6,
+                    ease: 'power3.inOut',
+                    onStart: () => {
+                        const approachDirection = new THREE.Vector3()
+                            .subVectors(camera.position, targetPos)
+                            .normalize();
+                        finalCameraPos
+                            .copy(targetPos)
+                            .add(approachDirection.multiplyScalar(dist))
+                            .add(new THREE.Vector3(0, selectedPlanet.size * 0.25, 0));
+                    },
+                    x: () => finalCameraPos.x,
+                    y: () => finalCameraPos.y,
+                    z: () => finalCameraPos.z,
                     onUpdate: () => {
                         camera.lookAt(targetPos);
                     }
-                }, '+=0');
-
-            // We start arrived state right after
+                });
         } else if (phase === 'idle') {
             gsap.to(camera.position, {
                 x: 0, y: 8, z: 40,

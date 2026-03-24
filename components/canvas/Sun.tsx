@@ -2,7 +2,7 @@
 
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { AdditiveBlending, Color, Mesh, ShaderMaterial } from 'three';
+import { AdditiveBlending, BackSide, Color, Mesh, ShaderMaterial } from 'three';
 import { useStore } from '@/store/useStore';
 import gsap from 'gsap';
 import { GraphicsQuality } from '@/store/useStore';
@@ -83,6 +83,31 @@ void main() {
 }
 `;
 
+const haloVertexShader = `
+varying vec3 vWorldNormal;
+varying vec3 vWorldPosition;
+void main() {
+  vec4 worldPos = modelMatrix * vec4(position, 1.0);
+  vWorldPosition = worldPos.xyz;
+  vWorldNormal = normalize(mat3(modelMatrix) * normal);
+  gl_Position = projectionMatrix * viewMatrix * worldPos;
+}
+`;
+
+const haloFragmentShader = `
+uniform vec3 uColorInner;
+uniform vec3 uColorOuter;
+uniform float uIntensity;
+varying vec3 vWorldNormal;
+varying vec3 vWorldPosition;
+void main() {
+  vec3 viewDir = normalize(cameraPosition - vWorldPosition);
+  float fresnel = pow(1.0 - max(dot(normalize(vWorldNormal), viewDir), 0.0), 2.1);
+  vec3 color = mix(uColorInner, uColorOuter, fresnel);
+  gl_FragColor = vec4(color, fresnel * uIntensity);
+}
+`;
+
 interface SunProps {
     quality: GraphicsQuality;
 }
@@ -90,9 +115,14 @@ interface SunProps {
 export default function Sun({ quality }: SunProps) {
     const meshRef = useRef<Mesh>(null);
     const materialRef = useRef<ShaderMaterial>(null);
+    const isCinematic = quality === 'cinematic';
+    const haloUniforms = useMemo(() => ({
+        uColorInner: { value: new Color('#ff8d2f') },
+        uColorOuter: { value: new Color('#ffd58a') },
+        uIntensity: { value: isCinematic ? 0.62 : 0.4 }
+    }), [isCinematic]);
     const setPhase = useStore(state => state.setPhase);
     const phase = useStore(state => state.phase);
-    const isCinematic = quality === 'cinematic';
 
     const uniforms = useMemo(() => ({
         uTime: { value: 0 },
@@ -143,13 +173,15 @@ export default function Sun({ quality }: SunProps) {
                 />
             </mesh>
 
-            <mesh scale={isCinematic ? 1.48 : 1.34} raycast={() => null}>
-                <sphereGeometry args={[4, 24, 24]} />
-                <meshBasicMaterial
-                    color="#ff9a3d"
+            <mesh scale={isCinematic ? 1.2 : 1.14} raycast={() => null}>
+                <sphereGeometry args={[4, 36, 36]} />
+                <shaderMaterial
+                    vertexShader={haloVertexShader}
+                    fragmentShader={haloFragmentShader}
+                    uniforms={haloUniforms}
                     transparent
-                    opacity={isCinematic ? 0.2 : 0.13}
                     blending={AdditiveBlending}
+                    side={BackSide}
                     depthWrite={false}
                 />
             </mesh>

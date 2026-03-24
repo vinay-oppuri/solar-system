@@ -12,13 +12,13 @@ export default function Starfield({ quality }: StarfieldProps) {
 
     return (
         <Stars
-            radius={isCinematic ? 140 : 100}
-            depth={isCinematic ? 90 : 50}
-            count={isCinematic ? 5200 : 2600}
-            factor={isCinematic ? 4.5 : 3}
+            radius={isCinematic ? 145 : 112}
+            depth={isCinematic ? 96 : 62}
+            count={isCinematic ? 6200 : 3600}
+            factor={isCinematic ? 4.2 : 3.2}
             saturation={0}
             fade
-            speed={isCinematic ? 0.55 : 0.35}
+            speed={isCinematic ? 0.55 : 0.4}
         />
     );
 }
