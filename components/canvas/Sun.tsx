@@ -86,10 +86,20 @@ void main() {
 const haloVertexShader = `
 varying vec3 vWorldNormal;
 varying vec3 vWorldPosition;
+varying vec2 vUv;
+uniform float uTime;
+varying float vWave;
 void main() {
-  vec4 worldPos = modelMatrix * vec4(position, 1.0);
+  float waveA = sin(position.y * 17.0 + uTime * 2.6);
+  float waveB = sin(position.x * 21.0 - uTime * 2.1);
+  float wave = waveA * 0.58 + waveB * 0.42;
+  vWave = wave;
+
+  vec3 displaced = position + normal * wave * 0.15;
+  vec4 worldPos = modelMatrix * vec4(displaced, 1.0);
   vWorldPosition = worldPos.xyz;
   vWorldNormal = normalize(mat3(modelMatrix) * normal);
+  vUv = uv;
   gl_Position = projectionMatrix * viewMatrix * worldPos;
 }
 `;
@@ -98,13 +108,25 @@ const haloFragmentShader = `
 uniform vec3 uColorInner;
 uniform vec3 uColorOuter;
 uniform float uIntensity;
+uniform float uTime;
 varying vec3 vWorldNormal;
 varying vec3 vWorldPosition;
+varying vec2 vUv;
+varying float vWave;
 void main() {
   vec3 viewDir = normalize(cameraPosition - vWorldPosition);
   float fresnel = pow(1.0 - max(dot(normalize(vWorldNormal), viewDir), 0.0), 2.1);
-  vec3 color = mix(uColorInner, uColorOuter, fresnel);
-  gl_FragColor = vec4(color, fresnel * uIntensity);
+
+  // Animated UV turbulence gives visible heat waves without creating a solid shell.
+  float heatA = sin(vUv.y * 16.0 + uTime * 2.4);
+  float heatB = sin(vUv.x * 22.0 - uTime * 1.8);
+  float heat = 0.5 + 0.5 * (heatA * 0.6 + heatB * 0.4);
+  float ripple = 0.85 + 0.15 * sin((vUv.x + vUv.y) * 30.0 - uTime * 3.0);
+  float wave = mix(0.72, 1.0, clamp(heat, 0.0, 1.0)) * ripple * (0.9 + 0.1 * vWave);
+  float rim = smoothstep(0.34, 0.985, fresnel);
+  float colorMix = clamp(0.2 + fresnel * 0.68 + (heat - 0.5) * 0.15, 0.0, 1.0);
+  vec3 color = mix(uColorInner, uColorOuter, colorMix);
+  gl_FragColor = vec4(color, rim * uIntensity * wave);
 }
 `;
 
@@ -115,11 +137,13 @@ interface SunProps {
 export default function Sun({ quality }: SunProps) {
     const meshRef = useRef<Mesh>(null);
     const materialRef = useRef<ShaderMaterial>(null);
+    const haloMaterialRef = useRef<ShaderMaterial>(null);
     const isCinematic = quality === 'cinematic';
     const haloUniforms = useMemo(() => ({
-        uColorInner: { value: new Color('#ff8d2f') },
-        uColorOuter: { value: new Color('#ffd58a') },
-        uIntensity: { value: isCinematic ? 0.62 : 0.4 }
+        uColorInner: { value: new Color('#ff9532') },
+        uColorOuter: { value: new Color('#ffd36a') },
+        uIntensity: { value: isCinematic ? 0.74 : 0.54 },
+        uTime: { value: 0 }
     }), [isCinematic]);
     const setPhase = useStore(state => state.setPhase);
     const phase = useStore(state => state.phase);
@@ -134,6 +158,9 @@ export default function Sun({ quality }: SunProps) {
     useFrame((state) => {
         if (materialRef.current) {
             materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
+        }
+        if (haloMaterialRef.current) {
+            haloMaterialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
         }
     });
 
@@ -173,9 +200,10 @@ export default function Sun({ quality }: SunProps) {
                 />
             </mesh>
 
-            <mesh scale={isCinematic ? 1.2 : 1.14} raycast={() => null}>
-                <sphereGeometry args={[4, 36, 36]} />
+            <mesh scale={isCinematic ? 1.16 : 1.12} raycast={() => null}>
+                <sphereGeometry args={[4, isCinematic ? 52 : 42, isCinematic ? 52 : 42]} />
                 <shaderMaterial
+                    ref={haloMaterialRef}
                     vertexShader={haloVertexShader}
                     fragmentShader={haloFragmentShader}
                     uniforms={haloUniforms}

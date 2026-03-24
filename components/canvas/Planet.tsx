@@ -99,6 +99,7 @@ const Planet = memo(({ data, index, quality }: PlanetProps) => {
     const isGasLike = data.type === 'Gas Giant' || data.type === 'Ice Giant';
     const isEarth = data.id === 'earth';
     const isVenus = data.id === 'venus';
+    const isIceGiant = data.type === 'Ice Giant';
 
     const setPhase = useStore(state => state.setPhase);
     const phase = useStore(state => state.phase);
@@ -116,6 +117,22 @@ const Planet = memo(({ data, index, quality }: PlanetProps) => {
     }, [texture, isCinematic, maxAnisotropy]);
 
     const angleRef = useRef((index * Math.PI) / 4); // Distribute initially
+    const albedoTint =
+        data.id === 'earth'
+            ? '#f2f8ff'
+            : data.id === 'venus'
+                ? '#f8ead6'
+                : isGasLike
+                    ? '#f4efe6'
+                    : '#efe8de';
+    const emissiveStrength =
+        data.id === 'earth'
+            ? (isCinematic ? 0.07 : 0.05)
+            : data.id === 'venus'
+                ? (isCinematic ? 0.055 : 0.04)
+                : isGasLike
+                    ? (isCinematic ? 0.045 : 0.03)
+                    : (isCinematic ? 0.03 : 0.02);
 
     useEffect(() => {
         // Initial reveal animation logic
@@ -202,11 +219,16 @@ const Planet = memo(({ data, index, quality }: PlanetProps) => {
                     <sphereGeometry args={[data.size, sphereSegments, sphereSegments]} />
                     <meshPhysicalMaterial
                         map={texture}
-                        roughness={isGasLike ? 0.74 : (isEarth ? 0.45 : 0.62)}
+                        color={albedoTint}
+                        roughness={isGasLike ? (isIceGiant ? 0.22 : 0.28) : (isEarth ? 0.16 : (isVenus ? 0.24 : 0.34))}
                         metalness={0.02}
-                        clearcoat={isEarth ? 0.55 : (isVenus ? 0.3 : 0.12)}
-                        clearcoatRoughness={isEarth ? 0.28 : 0.62}
-                        envMapIntensity={isCinematic ? 0.55 : 0.35}
+                        clearcoat={isEarth ? 0.9 : (isVenus ? 0.62 : (isGasLike ? 0.34 : 0.26))}
+                        clearcoatRoughness={isEarth ? 0.08 : (isVenus ? 0.18 : 0.28)}
+                        reflectivity={isGasLike ? 0.52 : 0.72}
+                        ior={isGasLike ? 1.2 : 1.33}
+                        envMapIntensity={isCinematic ? 1.48 : 1.22}
+                        emissive={albedoTint}
+                        emissiveIntensity={emissiveStrength}
                         transparent
                         opacity={isDimmed ? 0.4 : 1.0}
                     />

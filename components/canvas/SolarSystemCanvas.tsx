@@ -2,6 +2,7 @@
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { EffectComposer, Bloom, Noise, Vignette } from '@react-three/postprocessing';
+import { Environment, Lightformer } from '@react-three/drei';
 import { planets } from '@/data/planets';
 import Sun from './Sun';
 import Planet from './Planet';
@@ -113,7 +114,7 @@ export default function SolarSystemCanvas() {
             onCreated={({ gl, camera }) => {
                 camera.lookAt(0, 0, 0);
                 gl.toneMapping = THREE.ACESFilmicToneMapping;
-                gl.toneMappingExposure = isCinematicRequested ? 1.1 : 1.0;
+                gl.toneMappingExposure = isCinematicRequested ? 1.46 : 1.32;
                 gl.outputColorSpace = THREE.SRGBColorSpace;
                 gl.shadowMap.enabled = isCinematicStable;
                 gl.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -124,13 +125,12 @@ export default function SolarSystemCanvas() {
                 }
             }}
         >
-            <color attach="background" args={['#020408']} />
-            <fog attach="fog" args={['#020408', 105, 240]} />
-            <ambientLight intensity={isCinematicRequested ? 0.1 : 0.12} />
-            <hemisphereLight args={['#6d88b0', '#04070f', isCinematicRequested ? 0.22 : 0.18]} />
+            <color attach="background" args={['#02050b']} />
+            <ambientLight intensity={isCinematicRequested ? 0.22 : 0.18} />
+            <hemisphereLight args={['#9ec3ef', '#08101c', isCinematicRequested ? 0.48 : 0.38]} />
             <directionalLight
                 position={[26, 18, -10]}
-                intensity={isCinematicRequested ? 0.14 : 0.1}
+                intensity={isCinematicRequested ? 0.52 : 0.34}
                 color="#8db4ff"
                 castShadow={isCinematicStable}
                 shadow-mapSize-width={isCinematicStable ? 1024 : 512}
@@ -138,16 +138,43 @@ export default function SolarSystemCanvas() {
             />
             <pointLight
                 position={[0, 0, 0]}
-                intensity={isCinematicRequested ? 4.8 : 4.1}
-                distance={220}
-                decay={2}
+                intensity={isCinematicRequested ? 15.4 : 12.6}
+                distance={260}
+                decay={1.1}
                 color="#ffd780"
                 castShadow={false}
+            />
+            <pointLight
+                position={[0, 0, 0]}
+                intensity={isCinematicRequested ? 4.3 : 3.2}
+                distance={260}
+                decay={0.75}
+                color="#fff1d8"
             />
 
             <Suspense fallback={<group><mesh><sphereGeometry args={[2, 16, 16]} /><meshBasicMaterial color="red" /></mesh></group>}>
                 <RuntimeStabilityGuard enabled={isCinematicRequested} onClamp={handleSafetyClamp} />
                 <LoadingBridge />
+                <Environment resolution={isCinematicRequested ? 256 : 128}>
+                    <Lightformer
+                        intensity={isCinematicRequested ? 1.9 : 1.35}
+                        color="#ffd79d"
+                        position={[0, 0, -12]}
+                        scale={[12, 12, 1]}
+                    />
+                    <Lightformer
+                        intensity={isCinematicRequested ? 0.72 : 0.5}
+                        color="#8eb8ff"
+                        position={[38, 12, -42]}
+                        scale={[20, 20, 1]}
+                    />
+                    <Lightformer
+                        intensity={isCinematicRequested ? 0.52 : 0.36}
+                        color="#6f8ac2"
+                        position={[-36, -14, 30]}
+                        scale={[18, 18, 1]}
+                    />
+                </Environment>
                 <Starfield quality={sceneQuality} />
                 <Sun quality={sceneQuality} />
                 <AsteroidFlyby quality={sceneQuality} />
@@ -164,13 +191,13 @@ export default function SolarSystemCanvas() {
                 {postFxEnabled && (
                     <EffectComposer multisampling={0} enableNormalPass={false}>
                         <Bloom
-                            luminanceThreshold={0.2}
-                            luminanceSmoothing={0.86}
-                            intensity={1.22}
+                            luminanceThreshold={0.16}
+                            luminanceSmoothing={0.9}
+                            intensity={1.42}
                             mipmapBlur={false}
                         />
-                        <Noise premultiply opacity={0.02} />
-                        <Vignette eskil={false} offset={0.1} darkness={0.96} />
+                        <Noise premultiply opacity={0.015} />
+                        <Vignette eskil={false} offset={0.1} darkness={0.64} />
                     </EffectComposer>
                 )}
             </Suspense>

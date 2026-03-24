@@ -1,5 +1,6 @@
 'use client';
 
+import { Trail } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
@@ -27,6 +28,7 @@ export default function AsteroidFlyby({ quality }: AsteroidFlybyProps) {
     const meshRef = useRef<THREE.Mesh>(null);
     const progressRef = useRef(-0.2);
     const driftRef = useRef(0);
+    const isCinematic = quality === 'cinematic';
 
     const config = useMemo(() => {
         const side = Math.random() > 0.5 ? -1 : 1;
@@ -91,18 +93,29 @@ export default function AsteroidFlyby({ quality }: AsteroidFlybyProps) {
 
     return (
         <group ref={groupRef}>
-            <mesh ref={meshRef} geometry={geometry} castShadow={quality === 'cinematic'}>
-                <meshStandardMaterial
-                    color="#7e7368"
-                    roughness={0.95}
-                    metalness={0.02}
-                    emissive="#2a241d"
-                    emissiveIntensity={0.04}
-                />
-            </mesh>
+            <Trail
+                width={isCinematic ? 0.95 : 0.65}
+                length={isCinematic ? 7 : 5}
+                color="#ffbf7a"
+                decay={1}
+                attenuation={(t) => t * t}
+                local={false}
+                stride={0}
+                interval={1}
+            >
+                <mesh ref={meshRef} geometry={geometry} castShadow={isCinematic}>
+                    <meshStandardMaterial
+                        color="#7e7368"
+                        roughness={0.95}
+                        metalness={0.02}
+                        emissive="#2a241d"
+                        emissiveIntensity={0.04}
+                    />
+                </mesh>
+            </Trail>
             <mesh position={[0, 0, 0]} raycast={() => null}>
-                <sphereGeometry args={[config.size * 1.25, 12, 12]} />
-                <meshBasicMaterial color="#b38a63" transparent opacity={0.05} depthWrite={false} />
+                <sphereGeometry args={[config.size * 1.35, 16, 16]} />
+                <meshBasicMaterial color="#ffd5a0" transparent opacity={0.12} depthWrite={false} />
             </mesh>
         </group>
     );
