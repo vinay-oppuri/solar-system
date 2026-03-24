@@ -1,17 +1,24 @@
 'use client';
 
 import { Stars } from '@react-three/drei';
+import { GraphicsQuality } from '@/store/useStore';
 
-export default function Starfield() {
+interface StarfieldProps {
+    quality: GraphicsQuality;
+}
+
+export default function Starfield({ quality }: StarfieldProps) {
+    const isCinematic = quality === 'cinematic';
+
     return (
         <Stars
-            radius={100}
-            depth={50}
-            count={2600}
-            factor={3}
+            radius={isCinematic ? 140 : 100}
+            depth={isCinematic ? 90 : 50}
+            count={isCinematic ? 5200 : 2600}
+            factor={isCinematic ? 4.5 : 3}
             saturation={0}
             fade
-            speed={0.35}
+            speed={isCinematic ? 0.55 : 0.35}
         />
     );
 }

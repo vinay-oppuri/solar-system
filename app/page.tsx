@@ -6,6 +6,7 @@ const SolarSystemCanvas = dynamic(() => import('@/components/canvas/SolarSystemC
 const HoverCard = dynamic(() => import('@/components/ui/HoverCard'), { ssr: false });
 const PlanetDetailPanel = dynamic(() => import('@/components/ui/PlanetDetailPanel'), { ssr: false });
 const LoadingScreen = dynamic(() => import('@/components/ui/LoadingScreen'), { ssr: false });
+const GraphicsPreset = dynamic(() => import('@/components/ui/GraphicsPreset'), { ssr: false });
 
 export default function Home() {
     return (
@@ -16,6 +17,7 @@ export default function Home() {
 
             <HoverCard />
             <PlanetDetailPanel />
+            <GraphicsPreset />
             <LoadingScreen />
         </main>
     );

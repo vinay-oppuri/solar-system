@@ -2,9 +2,10 @@
 
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Color, Mesh, ShaderMaterial } from 'three';
+import { AdditiveBlending, Color, Mesh, ShaderMaterial } from 'three';
 import { useStore } from '@/store/useStore';
 import gsap from 'gsap';
+import { GraphicsQuality } from '@/store/useStore';
 
 const vertexShader = `
 varying vec2 vUv;
@@ -82,11 +83,16 @@ void main() {
 }
 `;
 
-export default function Sun() {
+interface SunProps {
+    quality: GraphicsQuality;
+}
+
+export default function Sun({ quality }: SunProps) {
     const meshRef = useRef<Mesh>(null);
     const materialRef = useRef<ShaderMaterial>(null);
     const setPhase = useStore(state => state.setPhase);
     const phase = useStore(state => state.phase);
+    const isCinematic = quality === 'cinematic';
 
     const uniforms = useMemo(() => ({
         uTime: { value: 0 },
@@ -121,18 +127,32 @@ export default function Sun() {
     };
 
     return (
-        <mesh
-            ref={meshRef}
-            onPointerEnter={handlePointerEnter}
-            onPointerLeave={handlePointerLeave}
-        >
-            <sphereGeometry args={[4, 48, 48]} />
-            <shaderMaterial
-                ref={materialRef}
-                vertexShader={vertexShader}
-                fragmentShader={fragmentShader}
-                uniforms={uniforms}
-            />
-        </mesh>
+        <group>
+            <mesh
+                ref={meshRef}
+                onPointerEnter={handlePointerEnter}
+                onPointerLeave={handlePointerLeave}
+                castShadow={isCinematic}
+            >
+                <sphereGeometry args={[4, isCinematic ? 64 : 48, isCinematic ? 64 : 48]} />
+                <shaderMaterial
+                    ref={materialRef}
+                    vertexShader={vertexShader}
+                    fragmentShader={fragmentShader}
+                    uniforms={uniforms}
+                />
+            </mesh>
+
+            <mesh scale={isCinematic ? 1.48 : 1.34} raycast={() => null}>
+                <sphereGeometry args={[4, 24, 24]} />
+                <meshBasicMaterial
+                    color="#ff9a3d"
+                    transparent
+                    opacity={isCinematic ? 0.2 : 0.13}
+                    blending={AdditiveBlending}
+                    depthWrite={false}
+                />
+            </mesh>
+        </group>
     );
 }
